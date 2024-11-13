@@ -9,11 +9,11 @@ Teaching Assistant: Arpit Gupta
 import os
 
 from collections import namedtuple
-from pox.pox.lib.addresses import EthAddr
-from pox.pox.lib.util import dpidToStr
-from pox.pox.lib.revent import *
-import pox.pox.openflow.libopenflow_01 as of
-from pox.pox.core import core
+from pox.lib.addresses import EthAddr
+from pox.lib.util import dpidToStr
+from pox.lib.revent import *
+import pox.openflow.libopenflow_01 as of
+from pox.core import core
 
 ''' Add your imports here ... '''
 
@@ -41,5 +41,3 @@ def launch():
     Starting the Firewall module
     '''
     core.registerNew(Firewall)
-
-    print("NO ROMPI")
