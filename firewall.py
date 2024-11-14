@@ -61,16 +61,17 @@ class Firewall (EventMixin):
 
             policy_variants = [policy]
 
-            if "nw_proto" not in policy_variant:
-                policy_variants = self._generate_variants(policy_variants, "nw_proto", NW_PROTO.keys())
+            if "nw_proto" not in policy_variants:
+                policy_variants = self._generate_variants(
+                    policy_variants, "nw_proto", NW_PROTO.keys())
 
-            if "dl_type" not in policy_variant:
-                policy_variants = self._generate_variants(policy_variants, "dl_type", DL_TYPE.keys())
+            if "dl_type" not in policy_variants:
+                policy_variants = self._generate_variants(
+                    policy_variants, "dl_type", DL_TYPE.keys())
 
             for policy_variant in policy_variants:
                 rule = self._rule_from_policy(policy_variant)
                 event.connection.send(rule)
-
 
     def _rule_from_policy(self, policy):
         """
@@ -82,9 +83,8 @@ class Firewall (EventMixin):
             parsed_value = self._parse_field_value(field, value)
             if parsed_value is None:
                 continue
-            
-            rule.match.__setattr__(field, parsed_value)
 
+            rule.match.__setattr__(field, parsed_value)
 
     def _parse_field_value(self, field, value):
         """
@@ -116,6 +116,7 @@ class Firewall (EventMixin):
                 new_policies.append(policy)
 
         return new_policies
+
 
 def launch():
     '''
