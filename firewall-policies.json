@@ -2,23 +2,23 @@
     "name": "Grupo 10 - Firewall policies",
     "discard_policies": [
         {
-            "destination_port": 80
+            "tp_dst": "80"
         },
         {
-            "ip_version": 4,
-            "source_ip": "10.0.0.1",
-            "transport_protocol": "UDP",
-            "destination_port": 5001
+            "tp_dst": "5001",
+            "nw_proto": "udp",
+            "nw_src": "10.0.0.1",
+            "dl_type": "ipv4"
         },
         {
-            "ip_version": 4,
-            "source_ip": "10.0.0.2",
-            "destination_ip": "10.0.0.3"
+            "nw_src": "10.0.0.2",
+            "nw_dst": "10.0.0.3",
+            "dl_type": "ipv4"
         },
         {
-            "ip_version": 4,
-            "source_ip": "10.0.0.3",
-            "destination_ip": "10.0.0.2"
+            "nw_src": "10.0.0.3",
+            "nw_dst": "10.0.0.2",
+            "dl_type": "ipv4"
         }
     ]
 }
