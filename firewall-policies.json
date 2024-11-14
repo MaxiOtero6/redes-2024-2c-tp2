@@ -1,0 +1,24 @@
+{
+    "name": "Grupo 10 - Firewall policies",
+    "discard_policies": [
+        {
+            "destination_port": 80
+        },
+        {
+            "ip_version": 4,
+            "source_ip": "10.0.0.1",
+            "transport_protocol": "UDP",
+            "destination_port": 5001
+        },
+        {
+            "ip_version": 4,
+            "source_ip": "10.0.0.2",
+            "destination_ip": "10.0.0.3"
+        },
+        {
+            "ip_version": 4,
+            "source_ip": "10.0.0.3",
+            "destination_ip": "10.0.0.2"
+        }
+    ]
+}
