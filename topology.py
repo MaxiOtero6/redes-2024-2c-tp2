@@ -3,24 +3,26 @@
 from mininet.topo import Topo
 
 
+MAX_HOSTS = 4
+
+
 class MyTopo(Topo):
-    def __init__(self):
+    def __init__(self, _switches):
         # Initialize topology
         Topo.__init__(self)
 
-        # Create switch
-        s1 = self.addSwitch("switch_1")
-        s2 = self.addSwitch("switch_2")
+        hosts = [self.addHost(f'h{i}') for i in range(1, MAX_HOSTS + 1)]
+        switches = [self.addHost(f's{i}') for i in range(1, _switches + 1)]
 
-        # Create hosts
-        h1 = self.addHost("host_1")
-        h2 = self.addHost("host_2")
-        h3 = self.addHost("host_3")
+        self.addLink(hosts[0], switches[0])
+        self.addLink(hosts[1], switches[0])
+        self.addLink(hosts[2], switches[-1])
+        self.addLink(hosts[3], switches[-1])
 
-        # Add links between switches and hosts self.addLink(s1, s2)
-        self.addLink(s1, h1)
-        self.addLink(s1, h2)
-        self.addLink(s2, h3)
+        [
+            self.addLink(switches[i], switches[i + 1])
+            for i in range(len(switches))
+        ]
 
 
 topos = {"customTopo": MyTopo}
