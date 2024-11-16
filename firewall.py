@@ -79,12 +79,17 @@ class Firewall (EventMixin):
         """
         rule = of.ofp_flow_mod()
 
-        for (field, value) in policy.items():
+        for (field, value) in sorted(policy.items()):
+            if policy.get('dl_type') == 'ipv6' and field != "dl_type":
+                continue
+
             parsed_value = self._parse_field_value(field, value)
+
             if parsed_value is None:
                 continue
 
             rule.match.__setattr__(field, parsed_value)
+        return rule
 
     def _parse_field_value(self, field, value):
         """
