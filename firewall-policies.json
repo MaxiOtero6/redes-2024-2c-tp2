@@ -1,24 +1,24 @@
 {
-    "name": "Grupo 10 - Firewall policies",
-    "discard_policies": [
-        {
-            "tp_dst": "80"
-        },
-        {
-            "tp_dst": "5001",
-            "nw_proto": "udp",
-            "nw_src": "10.0.0.1",
-            "dl_type": "ipv4"
-        },
-        {
-            "nw_src": "10.0.0.2",
-            "nw_dst": "10.0.0.3",
-            "dl_type": "ipv4"
-        },
-        {
-            "nw_src": "10.0.0.3",
-            "nw_dst": "10.0.0.2",
-            "dl_type": "ipv4"
-        }
-    ]
+	"name": "Grupo 10 - Firewall policies",
+	"discard_policies": [
+		{
+			"tp_dst": "80"
+		},
+		{
+			"tp_dst": "5001",
+			"nw_proto": "udp",
+			"nw_src": "10.0.0.1",
+			"dl_type": "ipv4"
+		},
+		{
+			"nw_src": "10.0.0.2",
+			"nw_dst": "10.0.0.3",
+			"dl_type": "ipv4"
+		},
+		{
+			"nw_src": "10.0.0.3",
+			"nw_dst": "10.0.0.2",
+			"dl_type": "ipv4"
+		}
+	]
 }
