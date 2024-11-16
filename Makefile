@@ -5,7 +5,7 @@ install-pox:
 
 mininet:
 	sudo mn -c  # Clean up first
-	sudo mn --custom ./topology.py --topo customTopo,${NSWITCHES}  --controller remote,ip=0.0.0.0,port=6633 -v debug
+	sudo mn --custom ./topology.py --topo customTopo,switches=${NSWITCHES} --controller remote,ip=127.0.0.1,port=6633 
 
 make run-pox:
 	python3 ./pox.py firewall
