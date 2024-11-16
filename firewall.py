@@ -40,11 +40,11 @@ class Firewall (EventMixin):
     def __init__(self):
         self.listenTo(core.openflow)
         self.load_policies()
-        log.debug("Enabling Firewall Module")
+        log.info("Enabling Firewall Module")
 
     def _handle_ConnectionUp(self, event):
         self.set_policies(event)
-        log.debug("Firewall rules installed on %s", dpidToStr(event.dpid))
+        log.info("Firewall rules installed on %s", dpidToStr(event.dpid))
 
     def load_policies(self):
         """
@@ -60,12 +60,11 @@ class Firewall (EventMixin):
         for policy in self.policies:
 
             policy_variants = [policy]
-
-            if "nw_proto" not in policy_variants:
+            if "nw_proto" not in policy:
                 policy_variants = self._generate_variants(
                     policy_variants, "nw_proto", NW_PROTO.keys())
 
-            if "dl_type" not in policy_variants:
+            if "dl_type" not in policy:
                 policy_variants = self._generate_variants(
                     policy_variants, "dl_type", DL_TYPE.keys())
 
