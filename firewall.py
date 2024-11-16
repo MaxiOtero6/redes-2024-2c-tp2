@@ -112,8 +112,9 @@ class Firewall (EventMixin):
 
         for policy in policies:
             for value in values:
-                policy[field] = value
-                new_policies.append(policy)
+                __policy = policy.copy()
+                __policy[field] = value
+                new_policies.append(__policy)
 
         return new_policies
 
