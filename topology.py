@@ -12,7 +12,7 @@ class MyTopo(Topo):
 
         hosts = [self.addHost(f'h{i}') for i in range(1, MAX_HOSTS + 1)]
         switches = [self.addSwitch(
-            f's{i}', protocols='OpenFlow13', failMode='standalone') for i in range(1, _switches + 1)]
+            f's{i}', failMode='standalone') for i in range(1, _switches + 1)]
 
         self.addLink(hosts[0], switches[0])
         self.addLink(hosts[1], switches[0])
