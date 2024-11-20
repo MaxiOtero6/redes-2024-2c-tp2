@@ -43,15 +43,18 @@ class Firewall (EventMixin):
         log.info("Enabling Firewall Module")
 
     def _handle_ConnectionUp(self, event):
-        self.set_policies(event)
-        log.info("Firewall rules installed on %s", dpidToStr(event.dpid))
+        if event.dpid == self.switch_id:
+            self.set_policies(event)
+            log.info("Firewall rules installed on %s", dpidToStr(event.dpid))
 
     def load_policies(self):
         """
         Load the firewall policies from the file
         """
         with open(POLICY_FILE_PATH, 'r') as f:
-            self.policies = json.load(f)["discard_policies"]
+            content = json.load(f)
+            self.policies = content["discard_policies"]
+            self.switch_id = content["firewall_switch_id"]
 
     def set_policies(self, event):
         """

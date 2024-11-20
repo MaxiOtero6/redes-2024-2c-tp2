@@ -1,5 +1,6 @@
 {
 	"name": "Grupo 10 - Firewall policies",
+	"firewall_switch_id": 1,
 	"discard_policies": [
 		{
 			"tp_dst": "80"
