@@ -31,7 +31,8 @@ DL_TYPE = {
 
 NW_PROTO = {
     "tcp": pkt.ipv4.TCP_PROTOCOL,
-    "udp": pkt.ipv4.UDP_PROTOCOL
+    "udp": pkt.ipv4.UDP_PROTOCOL,
+    "icmp": pkt.ipv4.ICMP_PROTOCOL
 }
 
 
