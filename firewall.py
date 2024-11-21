@@ -9,7 +9,7 @@ Teaching Assistant: Arpit Gupta
 import os
 
 from collections import namedtuple
-from pox.lib.addresses import EthAddr
+from pox.lib.addresses import EthAddr, IPAddr6
 from pox.lib.util import dpidToStr
 from pox.lib.revent import *
 from pox.lib.addresses import IPAddr
@@ -25,8 +25,7 @@ policyFile = "%s/pox/pox/misc/firewall-policies.csv" % os.environ['HOME']
 POLICY_FILE_PATH = "./firewall-policies.json"
 
 DL_TYPE = {
-    "ipv4": pkt.ethernet.IP_TYPE,
-    "ipv6": pkt.ethernet.IPV6_TYPE
+    "ipv4": pkt.ethernet.IP_TYPE
 }
 
 NW_PROTO = {
@@ -61,6 +60,11 @@ class Firewall (EventMixin):
         """
         Set the firewall policies on the event, if there is no nw_proto or dl_type in the policy, generate all variants
         """
+
+        r = of.ofp_flow_mod()
+        r.match.__setattr__("dl_type", pkt.ethernet.IPV6_TYPE)
+        event.connection.send(r)
+
         for policy in self.policies:
 
             policy_variants = [policy]
@@ -81,11 +85,8 @@ class Firewall (EventMixin):
         Generate a rule from the policy
         """
         rule = of.ofp_flow_mod()
-
+        print(policy)
         for (field, value) in sorted(policy.items()):
-            if policy.get('dl_type') == 'ipv6' and field != "dl_type":
-                continue
-
             parsed_value = self._parse_field_value(field, value)
 
             if parsed_value is None:
@@ -94,7 +95,7 @@ class Firewall (EventMixin):
             rule.match.__setattr__(field, parsed_value)
         return rule
 
-    def _parse_field_value(self, field, value):
+    def _parse_field_value(self, field, value: str):
         """
         Parse the field value based on the field
         """
@@ -105,10 +106,14 @@ class Firewall (EventMixin):
                 return int(value)
             case "nw_proto":
                 return NW_PROTO.get(value, None)
+            case "dl_src":
+                return EthAddr(value)
+            case "dl_dst":
+                return EthAddr(value)
             case "nw_src":
-                return IPAddr(value)
+                return IPAddr(value) if '.' in value else IPAddr6(value)
             case "nw_dst":
-                return IPAddr(value)
+                return IPAddr(value) if '.' in value else IPAddr6(value)
             case "dl_type":
                 return DL_TYPE.get(value, None)
 

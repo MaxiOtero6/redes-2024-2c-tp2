@@ -10,7 +10,8 @@ class MyTopo(Topo):
 
         _switches = _switches if _switches > 0 else 1
 
-        hosts = [self.addHost(f'h{i}') for i in range(1, MAX_HOSTS + 1)]
+        hosts = [self.addHost(f'h{i}', mac=f"00:00:00:00:00:{i}")
+                 for i in range(1, MAX_HOSTS + 1)]
         switches = [self.addSwitch(
             f's{i}', failMode='standalone') for i in range(1, _switches + 1)]
 
