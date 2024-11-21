@@ -130,7 +130,6 @@ class Firewall (EventMixin):
         Generate a rule from the policy
         """
         rule = of.ofp_flow_mod()
-        print(policy)
         for (field, value) in sorted(policy.items()):
             parsed_value = self._parse_field_value(field, value)
 
