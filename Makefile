@@ -7,7 +7,7 @@ mininet:
 	sudo mn -c  # Clean up first
 	sudo mn --custom ./topology.py --topo customTopo,switches=${NSWITCHES} --arp --switch ovsk --controller remote
 
-make run-pox:
+run-pox:
 	python3 ./pox.py forwarding.l2_learning firewall
 
 
