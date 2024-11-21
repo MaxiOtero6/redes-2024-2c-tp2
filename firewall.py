@@ -8,7 +8,6 @@ Teaching Assistant: Arpit Gupta
 '''
 import os
 
-from collections import namedtuple
 from pox.lib.addresses import EthAddr, IPAddr6
 from pox.lib.util import dpidToStr
 from pox.lib.revent import *
@@ -18,6 +17,14 @@ from pox.core import core
 
 import pox.lib.packet as pkt
 import json
+
+COLOR_CODES = {
+    'BLUE': '\033[94m',  # Blue
+    'GREEN': '\033[92m',   # Green
+    'YELLOW': '\033[93m',  # Yellow
+    'RED': '\033[91m',   # Red
+    "RESET": '\033[0m'
+}
 
 log = core.getLogger()
 policyFile = "%s/pox/pox/misc/firewall-policies.csv" % os.environ['HOME']
@@ -41,6 +48,44 @@ class Firewall (EventMixin):
         self.listenTo(core.openflow)
         self.load_policies()
         log.info("Enabling Firewall Module")
+        core.openflow.addListenerByName("PacketIn", self._handle_PacketIn)
+
+    def __get_destination(self, ip_packet):
+        # Check if the IP packet is a TCP or UDP packet
+        protocol = ip_packet.protocol
+
+        if protocol == pkt.ipv4.TCP_PROTOCOL:
+            tcp_packet = ip_packet.find('tcp')
+            if tcp_packet:
+                src_port = tcp_packet.srcport
+                dst_port = tcp_packet.dstport
+                return ("TCP", src_port, dst_port)
+        elif protocol == pkt.ipv4.UDP_PROTOCOL:
+            udp_packet = ip_packet.find('udp')
+            if udp_packet:
+                src_port = udp_packet.srcport
+                dst_port = udp_packet.dstport
+                return ("UDP", src_port, dst_port)
+
+        return ("ICMP" if protocol == pkt.ipv4.ICMP_PROTOCOL else str(protocol), '', '')
+
+    def _handle_PacketIn(self, event):
+        packet = event.parsed.find('ipv4')
+
+        if not packet:
+            return
+
+        (protocol, src_port, dst_port) = self.__get_destination(packet)
+
+        sender = COLOR_CODES["BLUE"] + \
+            str(packet.srcip) + f':{src_port}' + COLOR_CODES["RESET"]
+        receiver = COLOR_CODES["YELLOW"] + \
+            str(packet.dstip) + f':{dst_port}' + COLOR_CODES["RESET"]
+
+        dpid = COLOR_CODES['GREEN'] + str(event.dpid) + COLOR_CODES['RESET']
+        protocol = COLOR_CODES['RED'] + protocol + COLOR_CODES['RESET']
+
+        log.info(f"{dpid}:Packet: {protocol} {sender + ' --> ' + receiver}")
 
     def _handle_ConnectionUp(self, event):
         if event.dpid == self.switch_id:
